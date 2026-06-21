@@ -1,0 +1,61 @@
+---
+interface Post {
+  id: string;
+  data: { title: string; date: string; tags?: string[] };
+}
+
+interface Props {
+  title?: string;
+  posts?: Post[];
+  viewAllLink?: string;
+  moreText?: string;
+  dateFormat?: string;
+}
+
+const { title, posts = [], viewAllLink, moreText = '更多 →', dateFormat = '{month}月' } = Astro.props;
+// 从 id 中提取链接路径（去掉 "pages/" 前缀、保留其余路径段）
+function entryLink(id: string): string {
+  const parts = id.split('/');
+  // id 格式如 "pages/news/001"，去掉第一段得到 "news/001"
+  return parts.slice(1).join('/');
+}
+---
+
+<div class="module">
+  <div class="list-header">
+    <h3 class="module-title">{title}</h3>
+    {viewAllLink && <a href={viewAllLink} class="more-link">{moreText}</a>}
+  </div>
+  <div class="list-body">
+    {posts.map(post => {
+      const d = post.data.date;
+      return (
+        <div class="list-item">
+          <a href={`/${entryLink(post.id)}`} class="list-link">
+            <span class="list-date-block">
+              <span class="list-day">{d.slice(8, 10)}</span>
+              <span class="list-month">{dateFormat.replace('{month}', d.slice(5, 7)).replace('{day}', d.slice(8, 10)).replace('{year}', d.slice(0, 4))}</span>
+            </span>
+            <span class="list-text">{post.data.title}</span>
+          </a>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 2px solid var(--color-primary, #003366); }
+  .module-title { font-size: 15px; font-weight: bold; color: var(--color-primary, #003366); margin: 0; }
+  .more-link { font-size: 12px; color: var(--color-link, #00F); text-decoration: none; }
+  .list-body { list-style: none; padding: 0; margin: 0; }
+  .list-item { border-bottom: 1px dashed var(--color-divider, #EEE); }
+  .list-item:last-child { border-bottom: none; }
+  .list-link { display: flex; align-items: center; gap: 10px; padding: 5px 0; text-decoration: none; color: var(--color-text, #333); }
+  .list-link:hover { text-decoration: none; }
+  .list-date-block { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; line-height: 1.2; }
+  .list-day { font-size: 17px; font-weight: bold; font-family: Arial,sans-serif; color: var(--color-secondary, #C00); }
+  .list-month { font-size: 10px; font-family: Arial,sans-serif; color: #888; }
+  .list-text { font-size: 13px; font-family: "宋体","SimSun",serif; color: var(--color-link, #00F); line-height: 1.4; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .list-link:hover .list-text { color: var(--color-secondary, #C00); text-decoration: underline; }
+</style>

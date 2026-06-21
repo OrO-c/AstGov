@@ -1,0 +1,26 @@
+/* ============================================================
+   AstGov 主题包 — 全局样式
+   2000 年代老派政府网站风格
+   ============================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:var(--font-body, "宋体", "SimSun", serif);font-size:14px;line-height:1.8;color:var(--color-text, #333);background-color:var(--color-bg, #F5F5F5);min-height:100vh}
+img{max-width:100%;height:auto;border:none}
+a{color:var(--color-link, #00F);text-decoration:none}
+a:visited{color:var(--color-link-visited, #808)}
+a:hover{color:var(--color-secondary, #C00);text-decoration:underline}
+ul,ol{list-style:none;padding:0;margin:0}
+.container{max-width:1200px;margin:0 auto;padding:0 15px}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-heading, "黑体", "SimHei", sans-serif);line-height:1.5;color:var(--color-text, #333)}
+h1{font-size:24px}h2{font-size:20px}h3{font-size:16px}h4{font-size:14px}
+.module-title{font-size:15px;font-weight:bold;color:var(--color-primary, #036);border-left:3px solid var(--color-secondary, #C00);padding-left:8px;margin-bottom:10px;line-height:1.4}
+.module-title .more-link{float:right;font-size:12px;font-weight:normal;color:var(--color-link, #00F);padding-top:1px}
+.module{background:#FFF;border:1px solid var(--color-border, #CCC);padding:10px;margin-bottom:10px}
+.two-col{display:flex;gap:10px}
+.two-col .col-main{flex:0 0 70%;max-width:70%}
+.two-col .col-side{flex:0 0 calc(30% - 10px);max-width:calc(30% - 10px)}
+html[data-font-size="small"]{font-size:12px}html[data-font-size="small"] body{font-size:12px}html[data-font-size="small"] h1{font-size:20px}html[data-font-size="small"] h2{font-size:17px}html[data-font-size="small"] h3{font-size:14px}html[data-font-size="small"] .module-title{font-size:13px}
+html[data-font-size="large"]{font-size:16px}html[data-font-size="large"] body{font-size:16px}html[data-font-size="large"] h1{font-size:28px}html[data-font-size="large"] h2{font-size:23px}html[data-font-size="large"] h3{font-size:18px}html[data-font-size="large"] .module-title{font-size:17px}
+.card-date,.footer,.toolbar{font-size:12px!important}
+@media(max-width:1199px){.two-col{flex-direction:column}.two-col .col-main,.two-col .col-side{flex:0 0 100%;max-width:100%}}
+@media(max-width:767px){.container{padding:0 10px}.module{padding:8px}}

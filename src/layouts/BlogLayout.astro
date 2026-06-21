@@ -1,0 +1,38 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  siteName?: string;
+  siteSubtitle?: string;
+  siteLogo?: string;
+  siteIcon?: string;
+  topBar?: any;
+  navItems?: any[];
+  footer?: any;
+  colors?: any;
+  defaultFontSize?: string;
+}
+
+const props = Astro.props;
+---
+
+<BaseLayout {...props}>
+  <section class="page-section">
+    <div class="container">
+      <article class="article">
+        <slot />
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-section { padding: 15px 0; min-height: 400px; }
+  .article { background: #FFFFFF; border: 1px solid var(--color-border, #CCCCCC); padding: 30px 35px; }
+  @media (max-width: 767px) {
+    .article { padding: 15px 18px; }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+interface NavItem {
+  text: string;
+  url: string;
+  target?: string;
+  highlight?: boolean;
+  dropdown?: { text: string; url: string; target?: string }[];
+}
+
+interface Props { items?: NavItem[]; dropdownArrow?: string }
+const { items = [], dropdownArrow = '▼' } = Astro.props;
+---
+
+<nav class="nav">
+  <div class="container nav-inner">
+    {items.map(item => (
+      <div class:list={{ 'nav-item': true, 'has-dropdown': item.dropdown && item.dropdown.length > 0 }}>
+        <a
+          href={item.dropdown ? 'javascript:void(0)' : item.url}
+          class:list={{ 'nav-link': true, highlight: item.highlight }}
+        >
+          {item.text}
+          {item.dropdown && item.dropdown.length > 0 && <span class="nav-arrow">{dropdownArrow}</span>}
+        </a>
+        {item.dropdown && item.dropdown.length > 0 && (
+          <div class="dropdown-menu">
+            {item.dropdown.map(sub => (
+              <a href={sub.url} target={sub.target || '_self'} class="dropdown-item">{sub.text}</a>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .nav { background: var(--color-secondary, #CC0000); padding: 0; position: relative; z-index: 100; }
+  .nav-inner { display: flex; flex-wrap: nowrap; position: relative; }
+  .nav-item { position: relative; flex: 0 0 auto; }
+  .nav-link { display: block; padding: 8px 18px; color: #FFF; font-size: 15px; font-weight: bold; text-decoration: none; font-family: "黑体","SimHei",sans-serif; white-space: nowrap; border-right: 1px solid rgba(255,255,255,.15); transition: background .15s; line-height: 1.4; }
+  .nav-link:hover { background: rgba(0,0,0,.2); text-decoration: none; color: #FFF; }
+  .nav-link.highlight { background: #FF6600; }
+  .nav-link.highlight:hover { background: #E05500; }
+  .nav-arrow { font-size: 10px; margin-left: 4px; vertical-align: middle; }
+  .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; min-width: 140px; background: #FFF; border: 1px solid var(--color-border, #CCC); border-top: 2px solid var(--color-secondary, #C00); z-index: 200; padding: 0; }
+  .nav-item:hover .dropdown-menu { display: block; }
+  .dropdown-item { display: block; padding: 8px 16px; color: #333; font-size: 13px; font-family: "宋体","SimSun",serif; text-decoration: none; border-bottom: 1px solid #EEE; }
+  .dropdown-item:last-child { border-bottom: none; }
+  .dropdown-item:hover { background: #F5F5F5; color: var(--color-primary, #036); text-decoration: none; }
+  @media (max-width: 767px) { .nav-inner { flex-wrap: wrap; } .nav-link { padding: 7px 12px; font-size: 13px; border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); } .nav-item { width: 100%; } .dropdown-menu { position: static; width: 100%; } }
+</style>

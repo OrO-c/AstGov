@@ -1,0 +1,38 @@
+{
+  "name": "@astgov/theme",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "2005-style university website theme for Astro — 看起来像 2005，写起来像 2026",
+  "peerDependencies": {
+    "astro": "^6.4.8"
+  },
+  "exports": {
+    ".": "./lib/index.ts",
+    "./layouts/*": "./src/layouts/*.astro",
+    "./components/*": "./src/components/*.astro",
+    "./styles/*": "./src/styles/*.css"
+  },
+  "files": [
+    "lib",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "keywords": [
+    "astro",
+    "theme",
+    "university",
+    "government",
+    "retro",
+    "china"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OrO-c/AstGov"
+  }
+}

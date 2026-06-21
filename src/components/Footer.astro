@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  organization?: string;
+  contacts?: { label: string; value: string }[];
+  records?: { label: string; value: string; link?: string }[];
+  policeRecord?: string;
+  links?: { text: string; url: string }[];
+  extraLinks?: { text: string; url: string }[];
+  qrCodes?: { src: string; alt: string }[];
+  footerLogo?: string;
+  copyright?: string;
+}
+
+const { organization = '', contacts = [], records = [], policeRecord, links = [], extraLinks = [], qrCodes = [], copyright } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bar">
+      <span class="footer-org">{organization}</span>
+      {records.length > 0 && records.map((r, i) => (<><span class="footer-sep">|</span><span>{r.link ? <a href={r.link} target="_blank" rel="noopener">{r.value}</a> : r.value}</span></>))}
+      {policeRecord && <><span class="footer-sep">|</span><a href="http://www.beian.gov.cn" target="_blank" rel="noopener">{policeRecord}</a></>}
+    </div>
+    {extraLinks.length > 0 && (
+      <div class="footer-extra">{extraLinks.map((link, i) => (<span>{i > 0 && <span class="footer-sep">|</span>}<a href={link.url}>{link.text}</a></span>))}</div>
+    )}
+    {qrCodes.length > 0 && (
+      <div class="footer-qr">{qrCodes.map(qr => (<div class="qr-item"><Image src={qr.src} alt={qr.alt} class="qr-img" /><span class="qr-alt">{qr.alt}</span></div>))}</div>
+    )}
+    <div class="footer-copyright">{(copyright || '版权所有 © {year} {org}').replace('{year}', String(new Date().getFullYear())).replace('{org}', organization)}</div>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--color-primary, #003366); color: #EEE; padding: 10px 0; font-size: 12px; line-height: 1.6; font-family: "宋体","SimSun",serif; }
+  .footer a { color: #E8F0FF; text-decoration: none; }
+  .footer a:hover { color: #FFF; text-decoration: underline; }
+  .footer-bar { text-align: center; margin-bottom: 4px; }
+  .footer-org { color: #FFF; font-weight: bold; }
+  .footer-sep { margin: 0 6px; color: #B0C8E0; }
+  .footer-extra { text-align: center; margin-bottom: 6px; font-size: 12px; }
+  .footer-qr { display: flex; gap: 8px; justify-content: center; margin-bottom: 6px; }
+  .qr-item { text-align: center; }
+  .qr-img { width: 50px; height: 50px; display: block; border: 1px solid #FFF; margin-bottom: 2px; }
+  .qr-alt { font-size: 10px; color: #E8F0FF; display: block; }
+  .footer-copyright { text-align: center; font-size: 11px; color: #D0E0F0; }
+  @media (max-width: 767px) { .footer-bar { display: flex; flex-direction: column; gap: 2px; } .footer-sep { display: none; } .footer-qr { flex-wrap: wrap; } }
+</style>

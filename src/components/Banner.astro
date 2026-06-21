@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+interface Props { images: { src: string; alt: string; link?: string }[]; height?: number; autoplayInterval?: number; prevText?: string; nextText?: string }
+const { images = [], height = 360, autoplayInterval = 4000, prevText = '‹', nextText = '›' } = Astro.props;
+---
+
+{images.length > 0 && (
+  <div class="banner" id="banner">
+    <div class="banner-slides" id="bannerSlides">
+      {images.map((img, i) => (
+        <div class="banner-slide" data-index={i}>
+          {img.link ? <a href={img.link}><Image src={img.src} alt={img.alt} /></a> : <Image src={img.src} alt={img.alt} />}
+        </div>
+      ))}
+    </div>
+    {images.length > 1 && (<>
+      <button class="banner-btn banner-prev" id="bannerPrev" aria-label="上一张">{prevText}</button>
+      <button class="banner-btn banner-next" id="bannerNext" aria-label="下一张">{nextText}</button>
+      <div class="banner-dots" id="bannerDots">{images.map((_, i) => (<span class="banner-dot" data-index={i}></span>))}</div>
+    </>)}
+  </div>
+)}
+
+<script>
+(function(){var b=document.getElementById('banner');if(!b)return;var s=document.getElementById('bannerSlides'),sl=s?.querySelectorAll('.banner-slide'),dt=document.querySelectorAll('.banner-dot'),p=document.getElementById('bannerPrev'),n=document.getElementById('bannerNext');if(!sl||sl.length<2)return;var c=0,iv;function go(i){sl.forEach(function(e,j){e.style.display=j===i?'block':'none'});dt.forEach(function(e,j){e.className=j===i?'banner-dot active':'banner-dot'});c=i}function nx(){go((c+1)%sl.length)}function pr(){go((c-1+sl.length)%sl.length)}function st(){cl();iv=window.setInterval(nx,{autoplayInterval})}function cl(){if(iv){clearInterval(iv);iv=0}}go(0);st();p?.addEventListener('click',function(e){e.preventDefault();pr();st()});n?.addEventListener('click',function(e){e.preventDefault();nx();st()});dt.forEach(function(e){e.addEventListener('click',function(){go(parseInt(this.getAttribute('data-index')||'0',10));st()})});b.addEventListener('mouseenter',cl);b.addEventListener('mouseleave',st)})();
+</script>
+
+<style>
+  .banner { position: relative; width: 100%; overflow: hidden; background: var(--color-primary, #003366); }
+  .banner-slides { position: relative; }
+  .banner-slide { display: none; }
+  .banner-slide:first-child { display: block; }
+  .banner-slide img { display: block; width: 100%; height: {height}px; object-fit: cover; }
+  .banner-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(0,0,0,.35); color: #FFF; border: none; font-size: 36px; line-height: 1; padding: 8px 14px; cursor: pointer; font-family: Arial,sans-serif; transition: background .2s; border-radius: 0; }
+  .banner-btn:hover { background: rgba(0,0,0,.6); }
+  .banner-prev { left: 10px; }
+  .banner-next { right: 10px; }
+  .banner-dots { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; z-index: 10; }
+  .banner-dot { display: inline-block; width: 12px; height: 12px; margin: 0 5px; background: rgba(255,255,255,.5); border: 2px solid #FFF; cursor: pointer; transition: background .2s; }
+  .banner-dot.active { background: #FFF; }
+  @media (max-width: 767px) { .banner-slide img { height: 200px; } .banner-btn { font-size: 24px; padding: 4px 10px; } .banner-dot { width: 10px; height: 10px; } }
+</style>

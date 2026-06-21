@@ -1,0 +1,147 @@
+---
+import Header from '../components/Header.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface TopBarLink {
+  text: string;
+  url: string;
+  target?: string;
+}
+
+interface NavItem {
+  text: string;
+  url: string;
+  target?: string;
+  highlight?: boolean;
+  dropdown?: { text: string; url: string; target?: string }[];
+}
+
+interface FooterConfig {
+  organization: string;
+  contacts?: { label: string; value: string }[];
+  records?: { label: string; value: string; link?: string }[];
+  policeRecord?: string;
+  links?: { text: string; url: string }[];
+  extraLinks?: { text: string; url: string }[];
+  qrCodes?: { src: string; alt: string }[];
+  footerLogo?: string;
+}
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  siteName?: string;
+  siteSubtitle?: string;
+  siteLogo?: string;
+  siteIcon?: string;
+  topBar?: {
+    enabled?: boolean;
+    quickLinks?: TopBarLink[];
+    rightLinks?: TopBarLink[];
+    searchEnabled?: boolean;
+    searchPlaceholder?: string;
+  };
+  navItems?: NavItem[];
+  footer?: FooterConfig;
+  colors?: {
+    primary?: string;
+    primaryLight?: string;
+    secondary?: string;
+    accent?: string;
+    background?: string;
+    text?: string;
+    link?: string;
+    linkVisited?: string;
+    border?: string;
+    divider?: string;
+    fontFamily?: string;
+  };
+  defaultFontSize?: string;
+  /** UI 文本配置 */
+  ui?: {
+    moreText?: string;
+    dropdownArrow?: string;
+    copyright?: string;
+    quickLinks?: { title?: string; expandText?: string; collapseText?: string };
+    friendLinks?: { title?: string };
+    fontSizeLabels?: { small?: string; medium?: string; large?: string };
+    countdown?: { labels?: { days?: string; hours?: string; minutes?: string; seconds?: string } };
+    dateFormat?: string;
+  };
+}
+
+const {
+  title = 'AstGov',
+  description = '',
+  keywords = '',
+  siteName,
+  siteSubtitle,
+  siteLogo,
+  siteIcon = '/favicon.svg',
+  topBar = {},
+  navItems = [],
+  footer = { organization: '' },
+  colors = {},
+  defaultFontSize = 'medium',
+  ui = {},
+} = Astro.props;
+
+const fontSizeAttr = defaultFontSize;
+const cssVars = `
+:root {
+  --color-primary: ${colors.primary || '#003366'};
+  --color-primary-light: ${colors.primaryLight || colors.primary || '#003366'};
+  --color-secondary: ${colors.secondary || '#CC0000'};
+  --color-accent: ${colors.accent || colors.secondary || '#CC0000'};
+  --color-bg: ${colors.background || '#F5F5F5'};
+  --color-text: ${colors.text || '#333333'};
+  --color-link: ${colors.link || '#0000FF'};
+  --color-link-visited: ${colors.linkVisited || '#800080'};
+  --color-border: ${colors.border || '#CCCCCC'};
+  --color-divider: ${colors.divider || '#EEEEEE'};
+  --font-body: ${colors.fontFamily || '"宋体", "SimSun", serif'};
+  --font-heading: "黑体", "SimHei", sans-serif;
+}
+`;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-font-size={fontSizeAttr}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title ? `${title} - ${siteName || ''}`.replace(/ - $/, '') : siteName || 'AstGov'}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content={keywords} />
+  <link rel="icon" href={siteIcon} type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles/global.css" />
+  <Fragment set:html={`<style>${cssVars}</style>`} />
+</head>
+<body>
+  <Header
+    siteName={siteName}
+    siteSubtitle={siteSubtitle}
+    siteLogo={siteLogo}
+    topBar={topBar}
+    fontSizeLabels={ui.fontSizeLabels}
+  />
+  <Nav items={navItems} dropdownArrow={ui.dropdownArrow} />
+  <main>
+    <slot />
+  </main>
+  <Footer
+    organization={footer.organization}
+    contacts={footer.contacts}
+    records={footer.records}
+    policeRecord={footer.policeRecord}
+    links={footer.links}
+    extraLinks={footer.extraLinks}
+    qrCodes={footer.qrCodes}
+    footerLogo={footer.footerLogo}
+    copyright={ui.copyright}
+  />
+</body>
+</html>

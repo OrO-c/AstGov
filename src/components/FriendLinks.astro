@@ -1,0 +1,25 @@
+---
+interface Props { title?: string; links?: { text: string; url: string; target?: string }[] }
+const { title = '友情链接', links = [] } = Astro.props;
+---
+
+{links.length > 0 && (
+  <div class="module">
+    <h3 class="module-title">{title}</h3>
+    <div class="fl-links">
+      {links.map(link => (
+        <a href={link.url} target={link.target || '_blank'} rel="noopener" class="fl-item">{link.text}</a>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  .module-title { font-size: 15px; font-weight: bold; color: var(--color-primary, #036); border-left: 3px solid var(--color-secondary, #C00); padding-left: 8px; margin-bottom: 10px; line-height: 1.4; }
+  .fl-links { display: flex; flex-wrap: wrap; }
+  .fl-item { display: inline-block; padding: 5px 16px; color: var(--color-link, #00F); font-size: 13px; font-family: "宋体","SimSun",serif; text-decoration: none; border-right: 1px solid var(--color-border, #CCC); line-height: 1.6; }
+  .fl-item:first-child { padding-left: 0; }
+  .fl-item:last-child { border-right: none; }
+  .fl-item:hover { color: var(--color-secondary, #C00); text-decoration: underline; }
+  @media (max-width: 767px) { .fl-item { padding: 5px 10px; font-size: 12px; } }
+</style>

@@ -1,0 +1,32 @@
+---
+interface Props { title?: string; targetDate?: string; buttonLink?: string; buttonText?: string; labels?: { days?: string; hours?: string; minutes?: string; seconds?: string } }
+const { title = '距报名截止还有', targetDate = '', buttonLink = '/signup', buttonText = '立即报名 →', labels } = Astro.props;
+const lb = labels || {};
+---
+
+{targetDate && (
+  <div class="countdown-module">
+    <div class="countdown-title">{title}</div>
+    <div class="countdown-display" id="countdownDisplay" data-target={targetDate}>
+      <span class="countdown-num" id="cdDays">00</span><span class="countdown-label">{lb.days || '天'}</span>
+      <span class="countdown-num" id="cdHours">00</span><span class="countdown-label">{lb.hours || '时'}</span>
+      <span class="countdown-num" id="cdMinutes">00</span><span class="countdown-label">{lb.minutes || '分'}</span>
+      <span class="countdown-num" id="cdSeconds">00</span><span class="countdown-label">{lb.seconds || '秒'}</span>
+    </div>
+    <a href={buttonLink} class="countdown-btn">{buttonText}</a>
+  </div>
+)}
+
+<script>
+(function(){var e=document.getElementById('countdownDisplay');if(!e)return;var t=e.getAttribute('data-target')||'';if(!t)return;var d=document.getElementById('cdDays'),h=document.getElementById('cdHours'),m=document.getElementById('cdMinutes'),s=document.getElementById('cdSeconds');function p(n){return String(n).padStart(2,'0')}function u(){var n=new Date,o=new Date(t).getTime()-n.getTime();if(o<=0){d&&(d.textContent='00');h&&(h.textContent='00');m&&(m.textContent='00');s&&(s.textContent='00');return}var l=Math.floor(o/1e3),r=Math.floor(l/86400),g=Math.floor(l%86400/3600),e=Math.floor(l%3600/60),i=l%60;d&&(d.textContent=p(r));h&&(h.textContent=p(g));m&&(m.textContent=p(e));s&&(s.textContent=p(i))}u();setInterval(u,1e3)})();
+</script>
+
+<style>
+  .countdown-module { text-align: center; padding: 8px; }
+  .countdown-title { font-size: 15px; font-weight: bold; color: var(--color-secondary, #C00); font-family: "黑体","SimHei",sans-serif; margin-bottom: 8px; }
+  .countdown-display { margin-bottom: 10px; }
+  .countdown-num { display: inline-block; font-size: 24px; font-weight: bold; font-family: Arial,sans-serif; color: var(--color-primary, #036); background: #F0F0F0; padding: 3px 6px; margin: 0 2px; border: 1px solid var(--color-border, #CCC); min-width: 38px; text-align: center; }
+  .countdown-label { font-size: 13px; color: #666; font-family: "宋体","SimSun",serif; margin: 0 2px; }
+  .countdown-btn { display: inline-block; background: var(--color-secondary, #C00); color: #FFF; padding: 6px 24px; font-size: 14px; font-weight: bold; font-family: "黑体","SimHei",sans-serif; text-decoration: none; }
+  .countdown-btn:hover { background: #A00; text-decoration: none; color: #FFF; }
+</style>

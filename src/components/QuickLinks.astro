@@ -1,0 +1,43 @@
+---
+interface Props {
+  links?: { text: string; url: string; target?: string }[];
+  title?: string;
+  expandText?: string;
+  collapseText?: string;
+}
+const { links = [], title = '快速通道', expandText = '展开更多', collapseText = '收起' } = Astro.props;
+---
+
+{links.length > 0 && (
+  <section class="ql-section"><div class="container">
+    <div class="ql-bar">
+      <div class="ql-label">{title}</div>
+      <div class="ql-list" id="qlList">
+        {links.map(link => (
+          <a href={link.url} target={link.target || '_self'} class="ql-item">
+            <span class="ql-text">{link.text}</span>
+          </a>
+        ))}
+      </div>
+      {links.length > 4 && <button class="ql-toggle" id="qlToggle" data-expand={expandText} data-collapse={collapseText}>{expandText}</button>}
+    </div>
+  </div></section>
+)}
+
+<script>
+(function(){var t=document.getElementById('qlToggle'),l=document.getElementById('qlList');if(!t||!l)return;t.addEventListener('click',function(){l.classList.toggle('expanded');t.textContent=l.classList.contains('expanded')?co:ex})})();
+</script>
+
+<style>
+  .ql-section { padding: 0 0 8px 0; }
+  .ql-bar { display: flex; align-items: stretch; border: 1px solid var(--color-border, #CCC); background: #FFF; }
+  .ql-label { background: var(--color-primary, #036); color: #FFF; font-size: 14px; font-weight: bold; font-family: "黑体","SimHei",sans-serif; padding: 8px 14px; display: flex; align-items: center; white-space: nowrap; flex-shrink: 0; }
+  .ql-list { display: flex; flex-wrap: wrap; align-items: center; flex: 1; overflow: hidden; max-height: 80px; transition: max-height .25s; }
+  .ql-list.expanded { max-height: 200px; }
+  .ql-item { display: flex; align-items: center; gap: 4px; padding: 6px 14px; text-decoration: none; color: var(--color-text, #333); font-size: 13px; font-family: "宋体","SimSun",serif; border-right: 1px solid var(--color-divider, #EEE); transition: background .15s; }
+  .ql-item:hover { background: #F5F5F5; color: var(--color-primary, #036); text-decoration: none; }
+  .ql-text { line-height: 1.3; }
+  .ql-toggle { background: var(--color-bg, #F5F5F5); border: none; border-left: 1px solid var(--color-border, #CCC); padding: 6px 12px; font-size: 12px; color: var(--color-link, #00F); cursor: pointer; font-family: "宋体","SimSun",serif; white-space: nowrap; flex-shrink: 0; }
+  .ql-toggle:hover { color: var(--color-secondary, #C00); text-decoration: underline; }
+  @media (max-width: 767px) { .ql-bar { flex-wrap: wrap; } .ql-label { width: 100%; justify-content: center; } .ql-item { padding: 5px 10px; font-size: 12px; } }
+</style>
