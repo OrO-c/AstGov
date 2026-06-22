@@ -7,7 +7,7 @@
     "astro": "^6.4.8"
   },
   "exports": {
-    ".": "./lib/index.ts",
+    ".": "./lib/index.js",
     "./layouts/*": "./src/layouts/*.astro",
     "./components/*": "./src/components/*.astro",
     "./styles/*": "./src/styles/*.css"
