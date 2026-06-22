@@ -166,10 +166,11 @@ order: 1                     # 排序序号
 
 ## 添加新页面
 
+推荐使用项目提供的 **通用导入**（`src/config/page.ts`），避免每页重复写 import：
+
 ```astro
 ---
-import { BaseLayout } from '@astgov/theme';
-import { siteConfig } from '../config/site.config';
+import { BaseLayout, siteConfig } from '../config/page';
 ---
 
 <BaseLayout config={siteConfig} title="新页面标题">
@@ -178,6 +179,7 @@ import { siteConfig } from '../config/site.config';
 </BaseLayout>
 ```
 
+> `src/config/page.ts` 集中导出 `BaseLayout`（来自主题包）和 `siteConfig`（来自站点配置），新页面直接引用即可。
 > `BaseLayout` 支持通过 `config` 属性一次性传入整个站点配置，无需逐个列出 props。
 
 ## 删除不需要的页面
