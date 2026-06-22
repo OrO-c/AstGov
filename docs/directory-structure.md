@@ -10,7 +10,7 @@ my-site/                          ← 你的网站根目录
 │   ├── config/
 │   │   ├── site.config.ts        ← 站点配置（你主要改这个文件）
 │   │   ├── types.ts              ← 类型定义（不需要动）
-│   │   └── page.ts              ← 页面通用导入（BaseLayout + siteConfig）
+│   │   └── page.ts              ← 页面通用导入（BaseLayout 从主题包具体路径引入）
 │   ├── content/
 │   │   ├── posts/                ← 文章放在这里（按分类子目录）
 │   │   │   ├── news/

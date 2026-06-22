@@ -180,6 +180,7 @@ import { BaseLayout, siteConfig } from '../config/page';
 ```
 
 > `src/config/page.ts` 集中导出 `BaseLayout`（来自主题包）和 `siteConfig`（来自站点配置），新页面直接引用即可。
+> 主题包不再提供 `@astgov/theme` 顶层 barrel 导出，组件统一通过 `@astgov/theme/layouts/*` 或 `@astgov/theme/components/*` 路径直接导入。
 > `BaseLayout` 支持通过 `config` 属性一次性传入整个站点配置，无需逐个列出 props。
 
 ## 删除不需要的页面
