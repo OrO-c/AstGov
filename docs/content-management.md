@@ -170,18 +170,13 @@ import { BaseLayout } from '@astgov/theme';
 import { siteConfig } from '../config/site.config';
 ---
 
-<BaseLayout
-  siteName={siteConfig.siteName}
-  title="新页面标题"
-  topBar={siteConfig.topBar}
-  navItems={siteConfig.nav}
-  footer={siteConfig.footer}
-  colors={siteConfig.colors}
->
+<BaseLayout config={siteConfig} title="新页面标题">
   <h1>新页面</h1>
   <p>页面内容……</p>
 </BaseLayout>
 ```
+
+`BaseLayout` 支持通过 `config` 属性一次性传入整个站点配置（`siteName`、`nav`、`topBar`、`footer`、`colors` 等自动填充），无需逐个列出。各字段也支持独立传入以覆盖 `config` 中的值。
 
 然后在 `nav` 配置中添加菜单项。
 

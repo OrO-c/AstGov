@@ -29,10 +29,14 @@ interface FooterConfig {
   footerLogo?: string;
 }
 
+type DeepPartial<T> = { [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P] };
+
 interface Props {
   title?: string;
   description?: string;
   keywords?: string;
+  /** 快捷方式：传入整个 siteConfig 对象，自动提取各字段 */
+  config?: Record<string, any>;
   siteName?: string;
   siteSubtitle?: string;
   siteLogo?: string;
@@ -73,21 +77,22 @@ interface Props {
   };
 }
 
-const {
-  title = 'AstGov',
-  description = '',
-  keywords = '',
-  siteName,
-  siteSubtitle,
-  siteLogo,
-  siteIcon = '/favicon.svg',
-  topBar = {},
-  navItems = [],
-  footer = { organization: '' },
-  colors = {},
-  defaultFontSize = 'medium',
-  ui = {},
-} = Astro.props;
+const props = Astro.props;
+const { config = {} } = props;
+// 从 config 或独立 props 取值，独立 props 优先
+const title = props.title || config.title || 'AstGov';
+const description = props.description || config.description || config.meta?.description || '';
+const keywords = props.keywords || config.keywords || config.meta?.keywords || '';
+const siteName = props.siteName ?? config.siteName;
+const siteSubtitle = props.siteSubtitle ?? config.siteSubtitle;
+const siteLogo = props.siteLogo ?? config.siteLogo;
+const siteIcon = props.siteIcon ?? (config.siteIcon || '/favicon.svg');
+const topBar = props.topBar ?? config.topBar ?? {};
+const navItems = props.navItems ?? config.nav ?? [];
+const footer = props.footer ?? config.footer ?? { organization: '' };
+const colors = props.colors ?? config.colors ?? {};
+const defaultFontSize = props.defaultFontSize ?? config.defaultFontSize ?? 'medium';
+const ui = props.ui ?? config.ui ?? {};
 
 const fontSizeAttr = defaultFontSize;
 const cssVars = `
