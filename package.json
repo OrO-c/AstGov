@@ -1,6 +1,6 @@
 {
   "name": "@astgov/theme",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "type": "module",
   "description": "2005-style university website theme for Astro — 看起来像 2005，写起来像 2026",
   "peerDependencies": {
