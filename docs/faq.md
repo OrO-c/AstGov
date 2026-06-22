@@ -6,11 +6,11 @@
 
 **1. 文件位置对吗？**
 
-文章必须放在 `src/content/pages/` 下的分类子目录中：
+文章必须放在 `src/content/posts/` 下的分类子目录中：
 
 ```
-src/content/pages/news/001.md    ✅ 正确
-src/content/pages/001.md         ❌ 错误，缺少分类子目录
+src/content/posts/news/001.md    ✅ 正确
+src/content/posts/001.md         ❌ 错误，缺少分类子目录
 ```
 
 **2. `date` 字段加引号了吗？**
@@ -36,7 +36,7 @@ draft: true    ← 草稿模式，构建时不会输出
 2. **frontmatter 的 `category` 字段**（如果没有子目录）
 
 ```
-src/content/pages/news/001.md   →  自动归类到 news
+src/content/posts/news/001.md   →  自动归类到 news
 ```
 
 如果你手动设置了 `category` 字段，确保拼写与配置中的 `slug` 一致。
@@ -104,7 +104,7 @@ Astro 6 使用 Content Layer API，内容集合配置文件已移至项目根目
 
 ### 还想用 `entry.slug` 怎么办？
 
-Astro 6 的 Content Layer API 使用 `entry.id` 替代了 `entry.slug`。对于存放在 `src/content/pages/news/001.md` 的文件，`id` 值为 `pages/news/001`。主题已自动处理了 `pages/` 前缀剥离，您无需手动处理。
+Astro 6 的 Content Layer API 使用 `entry.id` 替代了 `entry.slug`。对于存放在 `src/content/posts/news/001.md` 的文件，`id` 值为 `news/001`，可直接用于 URL 路径。
 
 ## 如何更新主题包版本
 
@@ -121,7 +121,7 @@ npm update @astgov/theme
 ## 如何创建新的文章分类
 
 1. 在 `site.config.ts` 的 `categories` 数组中添加一项
-2. 在 `src/content/pages/` 下创建对应的子目录
+2. 在 `src/content/posts/` 下创建对应的子目录
 3. 在子目录中放入 `.md` 文章文件
 4. （可选）在 `src/pages/` 下创建该分类的列表页
 
@@ -137,7 +137,7 @@ categories: [
 
 ```bash
 # 创建目录
-mkdir src/content/pages/media
+mkdir src/content/posts/media
 # 创建文章
 ```
 
@@ -151,7 +151,7 @@ mkdir src/content/pages/media
 
 ```
 src/config/site.config.ts    ← 网站配置
-src/content/pages/           ← 所有文章
+src/content/posts/           ← 所有文章
 public/images/               ← 图片资源
 src/pages/                   ← 自定义页面（如果有）
 ```

@@ -46,7 +46,7 @@ siteSubtitle: 'Wangjunyi University', // ← 改成你的副标题
 
 ## 写第一篇文章
 
-在 `src/content/pages/news/` 下新建一个 `.md` 文件：
+在 `src/content/posts/news/` 下新建一个 `.md` 文件：
 
 ```markdown
 ---

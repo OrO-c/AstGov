@@ -1,11 +1,32 @@
 # 文章与页面管理
 
-## 文章放在哪里
+## 内容结构概览
 
-所有文章文件放在 `src/content/pages/` 下，按分类放在子目录中：
+AstGov 使用 Astro 6 的 **Content Layer API** 管理三类内容：
 
 ```
-src/content/pages/
+src/content/
+├── posts/                      ← 文章（Markdown，按分类子目录组织）
+│   ├── news/001.md
+│   └── announce/001.md
+├── banner/                     ← 轮播图（每张图一个 md 文件）
+│   └── slide-1.md
+└── headline/                   ← 头条卡片（每张卡片一个 md 文件）
+    └── card-1.md
+```
+
+内容集合的配置位于项目根目录下的 `src/content.config.ts`，无需手动编辑。
+
+---
+
+## 文章（posts）
+
+### 文章放在哪里
+
+所有文章文件放在 `src/content/posts/` 下，按分类放在子目录中：
+
+```
+src/content/posts/
 ├── news/001.md         →  /news/001
 ├── news/002.md         →  /news/002
 ├── announce/001.md     →  /announce/001
@@ -14,32 +35,9 @@ src/content/pages/
 
 - 子目录名 = 分类标识（slug），与 `site.config.ts` 中 `categories` 的 `slug` 对应
 - 文件名 = URL 最后一段（不含 `.md`）
+- 每个文章条目的 `id` 即路径本身，例如 `news/001`
 
-## Content Layer API（Astro 6）
-
-本主题使用 Astro 6 的 **Content Layer API** 管理内容。内容集合的配置位于项目根目录下的 `src/content.config.ts`（注意：**不是** `src/content/config.ts`）。
-
-无需手动编辑此文件，主题包已自动配置好 `glob()` loader 读取 `src/content/pages/` 下的 Markdown 文件。
-
-配置内容如下：
-
-```typescript
-// src/content.config.ts（不需要改）
-import { defineCollection } from 'astro:content';
-import { z } from 'astro/zod';
-import { glob } from 'astro/loaders';
-
-const pagesCollection = defineCollection({
-  loader: glob({ pattern: '**/pages/**/[^_]*.{md,mdx}', base: './src/content' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.string(),
-    // ...
-  }),
-});
-```
-
-## 文章格式
+### 文章格式
 
 每篇文章是一个 Markdown 文件，包含 frontmatter 和正文：
 
@@ -56,21 +54,6 @@ image: /images/cover.jpg     # 选填，string，头图路径
 ---
 
 正文内容，支持完整 Markdown 语法。
-
-## 二级标题
-
-- 列表
-- 列表
-
-**加粗** *斜体* `行内代码`
-
-> 引用
-
-![图片说明](/images/photo.jpg)
-
-| 表格 | 列2 |
-|------|-----|
-| 数据 | 数据 |
 ```
 
 ### frontmatter 字段一览
@@ -86,45 +69,72 @@ image: /images/cover.jpg     # 选填，string，头图路径
 | `draft` | boolean | 否 | `false` | 草稿模式。设为 `true` 则构建时不会输出 |
 | `image` | string | 否 | — | 头图路径 |
 
-## 分类规则
+### 分类规则
 
-文章的 `category` 字段决定它属于哪个分类。如果不填，则从文件所在的目录名推断：
+文章的 `category` 字段决定它属于哪个分类。如果不填，则从文件所在的子目录名推断：
 
 ```
-src/content/pages/news/001.md     →  category = "news"（从目录名自动推断）
-src/content/pages/announce/001.md →  category = "announce"
+src/content/posts/news/001.md     →  category = "news"
+src/content/posts/announce/001.md →  category = "announce"
 ```
 
 首页按 `categories` 配置中的 `slug` 匹配文章，显示在对应的分区中。
 
-## URL 规则
+### URL 规则
 
 ```
-src/content/pages/news/001.md     →  /news/001
-src/content/pages/news/002.md     →  /news/002
-src/content/pages/announce/001.md →  /announce/001
+src/content/posts/news/001.md     →  /news/001
+src/content/posts/news/002.md     →  /news/002
+src/content/posts/announce/001.md →  /announce/001
 ```
 
-文件名（不含扩展名）就是 URL 的最后一段。
+### 草稿模式
 
-> **关于内容标识：** Astro 6 Content Layer API 使用 `id` 而非旧版的 `slug` 作为条目标识符。在本主题中，`id` 格式为 `pages/news/001`，其中 `pages/` 前缀会被自动剥离生成干净 URL。如果您自定义页面逻辑，请使用 `entry.id` 而非 `entry.slug`（后者在 Astro 6 中已移除）。
+在 frontmatter 中设置 `draft: true`，草稿在 dev 中可见但 `npm run build` 时不会输出。
 
-## 草稿模式
+### 文章排序
 
-在 frontmatter 中设置：
+按 `date` 字段倒序排列，最新的在最前面。
+
+---
+
+## 轮播图（banner）
+
+轮播图不再写在 `site.config.ts` 中，而是以独立的 Markdown 文件管理。每张轮播图对应 `src/content/banner/` 下的一个 `.md` 文件。
 
 ```markdown
 ---
-title: 还没写完的文章
-draft: true
+src: /images/banner1.jpg     # 图片路径（public/ 下，以 / 开头）
+alt: 校园风光                # 替代文本
+link: /about                 # 点击跳转地址（可选）
+width: 1200                  # 图片宽度（可选，推荐提供以避免 CLS）
+height: 400                  # 图片高度（可选）
+order: 1                     # 排序序号（数字越小越靠前）
 ---
 ```
 
-草稿文章在开发服务器上可见，但执行 `npm run build` 时不会输出到 `dist/`。
+增加轮播图：在 `src/content/banner/` 下新建 `.md` 文件即可。删除文件即移除该图。
 
-## 文章排序
+---
 
-文章按 `date` 字段倒序排列，最新的在最前面。
+## 头条卡片（headline）
+
+头条卡片同样以独立 Markdown 文件管理，位于 `src/content/headline/`：
+
+```markdown
+---
+src: /images/card1.jpg       # 图片路径
+alt: 招生简章                # 替代文本
+title: 2026 年本科招生简章发布  # 卡片标题
+date: "2026-06-01"          # 日期（必须加引号）
+link: /admission             # 点击跳转地址（可选）
+width: 400                   # 图片宽度（可选）
+height: 250                  # 图片高度（可选）
+order: 1                     # 排序序号
+---
+```
+
+---
 
 ## 文章内图片
 
@@ -136,33 +146,25 @@ draft: true
 
 **路径规则**：以 `/` 开头，不加 `public`。
 
-支持格式：jpg、png、svg、webp、gif。
+> 主题组件（轮播图、头条卡片、页脚二维码）中的图片已全部使用 `astro:assets` 的 `<Image />` 组件渲染，提供自动尺寸推断和懒加载优化。
 
-图片会自动适应屏幕宽度，带 1px 边框和内边距。
-
-> 主题组件（如轮播图、头条卡片、页脚二维码）中的图片已全部使用 `astro:assets` 的 `<Image />` 组件渲染，提供自动尺寸推断和懒加载优化。
+---
 
 ## 页面管理
 
 ### 首页
-
-`src/pages/index.astro` — 从配置和文章自动生成。不需要手动修改。
+`src/pages/index.astro` — 从 content 集合和配置自动生成。不需要手动修改。
 
 ### 文章详情页
-
 `src/pages/[category]/[slug].astro` — 自动处理所有文章。不需要手动修改。
 
 ### 分类列表页
-
-`src/pages/news/index.astro` — 显示指定分类的所有文章。如果需要其他分类的列表页，复制这个文件，把分类过滤条件改成对应的 slug。
+`src/pages/news/index.astro` — 显示指定分类的所有文章。如需其他分类的列表页，复制此文件并修改过滤条件。
 
 ### 独立页面
-
-`src/pages/about.astro` 和 `src/pages/contact.astro` 是独立页面，内容写在页面文件中。
+`src/pages/about.astro` 和 `src/pages/contact.astro` 是独立页面，内容直接写在页面文件中。
 
 ## 添加新页面
-
-在 `src/pages/` 下创建 `.astro` 文件：
 
 ```astro
 ---
@@ -176,10 +178,7 @@ import { siteConfig } from '../config/site.config';
 </BaseLayout>
 ```
 
-`BaseLayout` 支持通过 `config` 属性一次性传入整个站点配置（`siteName`、`nav`、`topBar`、`footer`、`colors` 等自动填充），无需逐个列出。各字段也支持独立传入以覆盖 `config` 中的值。
-
-然后在 `nav` 配置中添加菜单项。
+> `BaseLayout` 支持通过 `config` 属性一次性传入整个站点配置，无需逐个列出 props。
 
 ## 删除不需要的页面
-
-直接删除 `src/pages/` 下对应的文件即可。同时记得在 `nav` 配置中移除对应的菜单项。
+直接删除 `src/pages/` 下对应的文件，同时移除 `nav` 配置中的菜单项。

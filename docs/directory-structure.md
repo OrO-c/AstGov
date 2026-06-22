@@ -11,13 +11,16 @@ my-site/                          ← 你的网站根目录
 │   │   ├── site.config.ts        ← 站点配置（你主要改这个文件）
 │   │   └── types.ts              ← 类型定义（不需要动）
 │   ├── content/
-│   │   └── pages/                ← 文章放在这里
-│   │       ├── news/
-│   │       │   ├── 001.md        ← 一篇新闻
-│   │       │   └── 002.md        ← 另一篇新闻
-│   │       └── announce/
-│   │           └── 001.md        ← 一篇公告
-│   ├── content.config.ts         ← Content Layer API 配置（Astro 6 新增）
+│   │   ├── posts/                ← 文章放在这里（按分类子目录）
+│   │   │   ├── news/
+│   │   │   │   └── 001.md        ← 一篇新闻
+│   │   │   └── announce/
+│   │   │       └── 001.md        ← 一篇公告
+│   │   ├── banner/               ← 轮播图（每张图一个 md）
+│   │   │   └── slide-1.md
+│   │   └── headline/             ← 头条卡片（每张卡片一个 md）
+│   │       └── card-1.md
+│   ├── content.config.ts         ← Content Layer API 配置（无需手动编辑）
 │   ├── pages/
 │   │   ├── index.astro           ← 首页
 │   │   ├── [category]/[slug].astro  ← 文章详情页（自动处理所有文章）
@@ -37,10 +40,12 @@ my-site/                          ← 你的网站根目录
 
 ## 你只需要改这些
 
-| 文件 | 作用 | 改动频率 |
-|------|------|---------|
-| `src/config/site.config.ts` | 所有配置 | 每次改网站都改 |
-| `src/content/pages/` | 文章内容 | 每次发文都改 |
+| 文件/目录 | 作用 | 改动频率 |
+|-----------|------|---------|
+| `src/config/site.config.ts` | 网站名称、导航、配色等配置 | 每次改网站都改 |
+| `src/content/posts/` | 文章内容 | 每次发文都改 |
+| `src/content/banner/` | 轮播图 | 换图时改 |
+| `src/content/headline/` | 头条卡片 | 换内容时改 |
 | `public/images/` | 图片资源 | 换图时改 |
 
 ## 你不需要碰这些
@@ -48,13 +53,11 @@ my-site/                          ← 你的网站根目录
 | 文件/目录 | 为什么 |
 |-----------|--------|
 | `src/config/types.ts` | 类型定义，主题包提供 |
-| `src/content.config.ts` | Content Layer API 配置，已设定好（Astro 6 自动读取） |
+| `src/content.config.ts` | Content Layer API 配置，已设定好 |
 | `src/layouts/` | 布局文件，转发给主题包 |
 | `astro.config.mjs` | 已配置好，除非你要改构建选项 |
 | `node_modules/` | 依赖包，不要手动修改 |
 | `dist/` | 构建产物，每次构建自动生成 |
-
-> **注意：** 相比 Astro 4.x 时代，内容集合配置文件从 `src/content/config.ts` **迁移到了根目录的 `src/content.config.ts`**，并使用 Content Layer API 的 `glob()` loader。这是 Astro 6 的强制要求。旧文件 `src/content/config.ts` 已不存在。
 
 ## 主题包提供了什么
 

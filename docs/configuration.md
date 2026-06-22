@@ -111,7 +111,7 @@ modules: {
 
 ## 类别定义
 
-类别是 AstGov 的核心概念。每个类别对应 `src/content/pages/` 下的一个子目录。
+类别是 AstGov 的核心概念。每个类别对应 `src/content/posts/` 下的一个子目录。
 
 ```typescript
 categories: [
@@ -136,38 +136,9 @@ categories: [
 { title: '媒体关注', slug: 'media', limit: 5, side: 'side' },
 ```
 
-然后在 `src/content/pages/media/001.md` 里写文章。
+然后在 `src/content/posts/media/001.md` 里写文章。
 
-## 轮播
-
-```typescript
-banner: {
-  images: [                             // 图片列表
-    { src: '/images/banner1.jpg', alt: '校园风光', link: '/about' },
-  ],
-  height: 360,                          // 图片高度（像素），默认 360
-  autoplayInterval: 4000,               // 自动切换间隔（毫秒），默认 4000
-  prevText: '‹',                        // 上一张按钮文字
-  nextText: '›',                        // 下一张按钮文字
-}
-```
-
-每张轮播图：`{ src: string, alt: string, link?: string }`。
-- `link` 可选，点击图片跳转地址。
-
-## 头条卡片
-
-```typescript
-headlineCards: [
-  {
-    src: '/images/card1.jpg',    // 图片路径
-    alt: '招生简章',              // 替代文本
-    title: '2026 年本科招生简章发布',  // 标题
-    date: '2026-06-01',          // 日期（YYYY-MM-DD 格式）
-    link: '/admission',          // 点击跳转地址（可选）
-  },
-]
-```
+轮播图和头条卡片的数据已从 `site.config.ts` **解耦到内容集合**中管理。详情见[内容管理 → 轮播图与头条卡片](./content-management.md#轮播图banner)。
 
 ## 快速通道
 
@@ -291,10 +262,8 @@ meta: {
 | 导航下拉菜单 | `nav[].dropdown` |
 | 首页显示哪些区域 | `modules` |
 | 首页分区 | `categories` |
-| 轮播图片 | `banner.images` |
-| 轮播高度 | `banner.height` |
-| 轮播切换速度 | `banner.autoplayInterval` |
-| 头条卡片 | `headlineCards` |
+| 轮播图片 | `src/content/banner/`（md 文件） |
+| 头条卡片 | `src/content/headline/`（md 文件） |
 | 快速通道链接 | `quickLinks` |
 | 友情链接 | `friendLinks` |
 | 底部机构名称 | `footer.organization` |
