@@ -1,7 +1,31 @@
 /* ============================================================
    AstGov 主题包 — 全局样式
    2000 年代老派政府网站风格
+   Tailwind 提供 prose 排版，字体保留宋体/黑体
    ============================================================ */
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-family-prose: "宋体", "SimSun", serif;
+  --font-family-sans: "黑体", "SimHei", sans-serif;
+  --font-family-mono: Consolas, Monaco, monospace;
+}
+
+/* prose 配色定制 — 保留2000s 风格 */
+.prose {
+  --tw-prose-body: #2c2c2c;
+  --tw-prose-headings: var(--color-primary, #1A3C6E);
+  --tw-prose-links: var(--color-link, #0056B3);
+  --tw-prose-bold: #333;
+  --tw-prose-quotes: #555;
+  --tw-prose-quote-borders: var(--color-secondary, #B22222);
+  --tw-prose-code: #c7254e;
+  --tw-prose-hr: #e8e8e8;
+  --tw-prose-th-bg: #f0f4f8;
+}
+.prose img { border: 1px solid #e0e0e0; padding: 4px; background: #fafafa; border-radius: 0; }
+
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{font-size:14px;scroll-behavior:smooth}
 body{font-family:var(--font-body, "宋体", "SimSun", serif);font-size:14px;line-height:1.8;color:var(--color-text, #333);background-color:var(--color-bg, #F5F5F5);min-height:100vh}
