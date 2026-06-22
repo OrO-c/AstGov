@@ -1,15 +1,16 @@
 ---
 import { Image } from 'astro:assets';
-interface Props { images: { src: string; alt: string; link?: string }[]; height?: number; autoplayInterval?: number; prevText?: string; nextText?: string }
+interface BannerImage { src: string; alt: string; link?: string; width?: number; height?: number }
+interface Props { images: BannerImage[]; height?: number; autoplayInterval?: number; prevText?: string; nextText?: string }
 const { images = [], height = 360, autoplayInterval = 4000, prevText = '‹', nextText = '›' } = Astro.props;
 ---
 
 {images.length > 0 && (
-  <div class="banner" id="banner">
+  <div class="banner" id="banner" style={`--banner-height: ${height}px`}>
     <div class="banner-slides" id="bannerSlides">
       {images.map((img, i) => (
         <div class="banner-slide" data-index={i}>
-          {img.link ? <a href={img.link}><Image src={img.src} alt={img.alt} /></a> : <Image src={img.src} alt={img.alt} />}
+          {img.link ? <a href={img.link}><Image src={img.src} alt={img.alt} width={img.width} height={img.height} /></a> : <Image src={img.src} alt={img.alt} width={img.width} height={img.height} />}
         </div>
       ))}
     </div>
@@ -30,7 +31,7 @@ const { images = [], height = 360, autoplayInterval = 4000, prevText = '‹', ne
   .banner-slides { position: relative; }
   .banner-slide { display: none; }
   .banner-slide:first-child { display: block; }
-  .banner-slide img { display: block; width: 100%; height: {height}px; object-fit: cover; }
+  .banner-slide img { display: block; width: 100%; height: var(--banner-height, 360px); object-fit: cover; }
   .banner-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(0,0,0,.35); color: #FFF; border: none; font-size: 36px; line-height: 1; padding: 8px 14px; cursor: pointer; font-family: Arial,sans-serif; transition: background .2s; border-radius: 0; }
   .banner-btn:hover { background: rgba(0,0,0,.6); }
   .banner-prev { left: 10px; }

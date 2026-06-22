@@ -13,11 +13,9 @@ interface Props {
 }
 
 const { title, posts = [], viewAllLink, moreText = '更多 →', dateFormat = '{month}月' } = Astro.props;
-// 从 id 中提取链接路径（去掉 "pages/" 前缀、保留其余路径段）
+// id 格式如 "news/001"，直接作为链接路径
 function entryLink(id: string): string {
-  const parts = id.split('/');
-  // id 格式如 "pages/news/001"，去掉第一段得到 "news/001"
-  return parts.slice(1).join('/');
+  return id;
 }
 ---
 

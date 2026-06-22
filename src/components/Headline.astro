@@ -1,8 +1,9 @@
 ---
 import { Image } from 'astro:assets';
 
+interface HeadlineCard { src: string; alt: string; title: string; date: string; link?: string; width?: number; height?: number }
 interface Props {
-  cards?: { src: string; alt: string; title: string; date: string; link?: string }[];
+  cards?: HeadlineCard[];
 }
 const { cards = [] } = Astro.props;
 ---
@@ -13,7 +14,7 @@ const { cards = [] } = Astro.props;
       {cards.map(card => (
         <article class="headline-card">
           <a href={card.link || '#'}>
-            <div class="card-img"><Image src={card.src} alt={card.alt} /></div>
+            <div class="card-img"><Image src={card.src} alt={card.alt} width={card.width} height={card.height} /></div>
             <div class="card-body"><h3 class="card-title">{card.title}</h3><time class="card-date">{card.date}</time></div>
           </a>
         </article>
