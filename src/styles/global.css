@@ -1,7 +1,7 @@
 /* ============================================================
    AstGov 主题包 — 全局样式
    2000 年代老派政府网站风格
-   Tailwind 提供 prose 排版，字体保留宋体/黑体
+   Tailwind 提供 prose 排版（不影响 retro 组件区域）
    ============================================================ */
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
@@ -12,7 +12,9 @@
   --font-family-mono: Consolas, Monaco, monospace;
 }
 
-/* prose 配色定制 — 保留2000s 风格 */
+/* ============================================================ */
+/* prose 排版定制 — 保留中文阅读习惯                     */
+/* ============================================================ */
 .prose {
   --tw-prose-body: #2c2c2c;
   --tw-prose-headings: var(--color-primary, #1A3C6E);
@@ -23,9 +25,39 @@
   --tw-prose-code: #c7254e;
   --tw-prose-hr: #e8e8e8;
   --tw-prose-th-bg: #f0f4f8;
+  --tw-prose-font-size: 1rem;
+  --tw-prose-line-height: 1.9;
 }
-.prose img { border: 1px solid #e0e0e0; padding: 4px; background: #fafafa; border-radius: 0; }
+/* 中文段落首行缩进两字符 */
+.prose p { text-indent: 2em; }
+.prose p:first-of-type { margin-top: 0; }
+/* 活动卡片 — 不需要缩进的块 */
+.prose .activity-card p { text-indent: 0; }
+.prose .activity-card { border-left: 3px solid var(--color-secondary, #CC0000); padding-left: 16px; margin-bottom: 1.5em; }
+.prose .activity-card h3 { margin-bottom: 0.25em; }
+.prose .activity-card .meta,
+.prose .activity-card .source { font-size: 0.875rem; color: #888; margin-bottom: 0; }
+/* 脚注、副标题 */
+.prose .subtitle { text-align: center; color: #666; text-indent: 0; }
+.prose .footnote { color: #666; font-size: 0.875rem; text-indent: 0; }
+/* 图片修饰 */
+.prose img { border: 1px solid #e0e0e0; padding: 4px; background: #fafafa; border-radius: 0; margin: 1.5em auto; }
+/* h2 左边框强调 */
+.prose h2 { border-left: 3px solid var(--color-secondary, #CC0000); padding-left: 0.5rem; }
+/* h1 居中 */
+.prose h1 { text-align: center; }
 
+/* ============================================================ */
+/* 页面内容容器 — 统一 prose 排版                    */
+/* ============================================================ */
+.page-content { background: #FFF; border: 1px solid var(--color-border, #CCC); padding: 25px; min-height: 400px; }
+.page-content:not(.no-prose) { @apply prose prose-lg max-w-none; }
+/* 兼容不支持 @apply 的环境 */
+.page-content:not(.no-prose) { font-size: 1rem; line-height: 1.9; color: #2c2c2c; max-width: none; }
+
+/* ============================================================ */
+/* 基础重置 — 用 :where() 零优先级，不入侵 prose       */
+/* ============================================================ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{font-size:14px;scroll-behavior:smooth}
 body{font-family:var(--font-body, "宋体", "SimSun", serif);font-size:14px;line-height:1.8;color:var(--color-text, #333);background-color:var(--color-bg, #F5F5F5);min-height:100vh}
@@ -33,10 +65,28 @@ img{max-width:100%;height:auto;border:none}
 a{color:var(--color-link, #00F);text-decoration:none}
 a:visited{color:var(--color-link-visited, #808)}
 a:hover{color:var(--color-secondary, #C00);text-decoration:underline}
-ul,ol{list-style:none;padding:0;margin:0}
+
+/* 以下 retro 基础样式不入侵 prose 内容区 */
+:where(:not(.prose)) ul, :where(:not(.prose)) ol { list-style: none; padding: 0; margin: 0; }
+:where(:not(.prose)) h1 { font-size: 24px; }
+:where(:not(.prose)) h2 { font-size: 20px; }
+:where(:not(.prose)) h3 { font-size: 16px; }
+:where(:not(.prose)) h4 { font-size: 14px; }
+:where(:not(.prose)) h1, :where(:not(.prose)) h2, :where(:not(.prose)) h3,
+:where(:not(.prose)) h4, :where(:not(.prose)) h5, :where(:not(.prose)) h6 {
+  font-family: var(--font-heading, "黑体", "SimHei", sans-serif);
+  line-height: 1.5;
+  color: var(--color-text, #333);
+}
+
+/* ============================================================ */
+/* 容器                                   */
+/* ============================================================ */
 .container{max-width:1200px;margin:0 auto;padding:0 15px}
-h1,h2,h3,h4,h5,h6{font-family:var(--font-heading, "黑体", "SimHei", sans-serif);line-height:1.5;color:var(--color-text, #333)}
-h1{font-size:24px}h2{font-size:20px}h3{font-size:16px}h4{font-size:14px}
+
+/* ============================================================ */
+/* 组件样式 — 不受 prose 影响                       */
+/* ============================================================ */
 .module-title{font-size:15px;font-weight:bold;color:var(--color-primary, #036);border-left:3px solid var(--color-secondary, #C00);padding-left:8px;margin-bottom:10px;line-height:1.4}
 .module-title .more-link{float:right;font-size:12px;font-weight:normal;color:var(--color-link, #00F);padding-top:1px}
 .module{background:#FFF;border:1px solid var(--color-border, #CCC);padding:10px;margin-bottom:10px}
@@ -45,14 +95,13 @@ h1{font-size:24px}h2{font-size:20px}h3{font-size:16px}h4{font-size:14px}
 .two-col .col-side{flex:0 0 calc(30% - 10px);max-width:calc(30% - 10px)}
 html[data-font-size="small"]{font-size:12px}html[data-font-size="small"] body{font-size:12px}html[data-font-size="small"] h1{font-size:20px}html[data-font-size="small"] h2{font-size:17px}html[data-font-size="small"] h3{font-size:14px}html[data-font-size="small"] .module-title{font-size:13px}
 html[data-font-size="large"]{font-size:16px}html[data-font-size="large"] body{font-size:16px}html[data-font-size="large"] h1{font-size:28px}html[data-font-size="large"] h2{font-size:23px}html[data-font-size="large"] h3{font-size:18px}html[data-font-size="large"] .module-title{font-size:17px}
+
 /* ===== 页面通用布局 ===== */
 .page-section{padding:15px 0;min-height:400px}
 .breadcrumb{font-size:12px;color:#666;padding:8px 0;margin-bottom:10px;border-bottom:1px solid var(--color-divider, #EEE)}
 .breadcrumb a{color:var(--color-link,#00F)}
-.page-content{background:#FFF;border:1px solid var(--color-border,#CCC);padding:25px;min-height:400px}
-/* ===== 独立页面样式 ===== */
-.static-content h1{font-size:22px;text-align:center;color:var(--color-primary);margin-bottom:20px}
-.static-content p{font-size:14px;line-height:2;margin-bottom:8px;text-indent:2em}
+
+/* ===== 联系表格 ===== */
 .page-title{font-size:20px;text-align:center;color:var(--color-primary);margin-bottom:20px}
 .contact-table{width:100%;max-width:600px;margin:0 auto;border-collapse:collapse}
 .contact-table td{padding:10px 8px;border-bottom:1px solid var(--color-divider,#EEE);font-size:14px;line-height:1.8}

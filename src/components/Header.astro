@@ -1,6 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-
 interface Props {
   siteName?: string;
   siteSubtitle?: string;
@@ -52,7 +50,7 @@ const { enabled = true, quickLinks = [], rightLinks = [], searchEnabled = false,
   )}
   <div class="header-main">
     <div class="container header-main-inner">
-      {siteLogo && <a href="/" class="logo-link"><Image src={siteLogo} alt={siteName || ''} class="logo-img" /></a>}
+      {siteLogo && <a href="/" class="logo-link"><img src={siteLogo} alt={siteName || ''} class="logo-img" /></a>}
       <div class="site-title-group">
         <h1 class="site-name"><a href="/">{siteName}</a></h1>
         {siteSubtitle && <p class="site-subtitle">{siteSubtitle}</p>}
